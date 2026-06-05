@@ -1,0 +1,173 @@
+managed implementation in class zbp_i_employee_master unique;
+strict ( 2 );
+with draft;
+
+define behavior for ZI_EMPLOYEE_MASTER
+persistent table zemp_master_tp3
+draft table zemp_master_drft
+lock master
+total etag LastChangedAt
+authorization master ( global )
+etag master LocalLastChangedAt
+{
+  field ( readonly )
+  Empid,
+  IdNo,
+  EmploymentStatus,
+  fullname,
+  CreatedBy,
+  CreatedAt,
+  LastChangedBy,
+  LastChangedAt,
+  LocalLastChangedAt;
+
+  field ( numbering : managed )
+  Empid;
+
+  create ( authorization : global );
+  update;
+  delete;
+
+  action InitPermanentAddress;
+  action InitCurrentAddress;
+  action OnboardEmployee;
+  action OffboardEmployee;
+  action TerminateEmployee;
+// Need to check if I can use determine action with validation instead of uising determination seprately
+  determination CalculateFullName on modify { field FirstName, LastName; }
+  determination CalculateIdNo on modify { field Empid; }
+  determination UpdateEmploymentStatus on save { create; update; }
+  determination CheckDoB on modify { field DateOfBirth; }
+  determination ForPersonalDetails on modify { field DateofBirth; }
+  determination ForContactDetails on modify { field PhoneNumberPer, PhoneNumberHom, EmailId; }
+  validation DateOfBirthValidate on save { field DateOfBirth ; create; update; }
+
+  draft action Resume;
+  draft action Edit;
+  draft action Discard;
+  draft determine action Prepare {
+     validation DateOfBirthValidate;
+  }
+  draft action Activate optimized;
+  // draft action prepare;
+
+  mapping for zemp_master_tp3
+    {
+      Empid                    = empid;
+      IdNo                     = id_no;
+      Active                   = active;
+      Department               = department;
+      FirstName                = first_name;
+      LastName                 = last_name;
+      CreatedAt                = created_at;
+      CreatedBy                = created_by;
+      LastChangedAt            = last_changed_at;
+      LastChangedBy            = last_changed_by;
+      LocalLastChangedAt       = local_last_changed_at;
+      FileName                 = file_name;
+      ImageData                = image_data;
+      MimeType                 = mime_type;
+      FullName                 = full_name;
+      Branch                   = branch;
+      ConfirmationDate         = confirmation_date;
+      DateOfBirth              = date_of_birth;
+      Designation              = designation;
+      EmailId                  = email_id;
+      EmergencyContactName     = emergency_contact_name;
+      EmergencyContactPhone    = emergency_contact_phone;
+      EmergencyContactRelation = emergency_contact_relation;
+      EmploymentStatus         = employment_status;
+      ExitDate                 = exit_date;
+      JoiningDate              = joining_date;
+      MaritalStatus            = marital_status;
+      Gender                   = gender;
+      PhoneNumberPer           = phone_number_per;
+      PhoneNumberHom           = Phone_number_hom;
+      Nationality              = nationality;
+      MiddleName               = middle_name;
+      Organization             = organization;
+      OfficeLocaiton           = office_locaiton;
+      TermiationDate           = termiation_date;
+      Terminated               = terminated;
+      TerminationReason        = termination_reason;
+    }
+
+  association _paddress { create; with draft; }
+  association _caddress { create; with draft; }
+
+}
+
+
+define behavior for ZI_EMP_ADDRESS_DATA
+persistent table zemp_address_tp3
+draft table zemp_addr_cdrft
+lock dependent by _employee
+authorization master ( global )
+{
+
+  field ( readonly )
+  Empid,
+  AddrType;
+
+  delete;
+  update;
+
+  mapping for zemp_address_tp3
+    {
+      AddrType          = addr_type;
+      City1             = city1;
+      Country           = country;
+      CreateBy          = create_by;
+      CreatedAt         = created_at;
+      Empid             = empid;
+      LastChagedAt      = last_chaged_at;
+      LastChangedBy     = last_changed_by;
+      LocalLastChangeAt = local_last_change_at;
+      Name1             = name1;
+      PostalCode        = postal_code;
+      State             = state;
+      Street            = street;
+    }
+
+  association _employee { with draft; }
+
+  //determination InitAddressDrafts on modify { create; }
+
+}
+
+define behavior for ZI_EMP_PERM_ADDRESS_DATA
+persistent table zemp_address_tp3
+draft table zemp_addr_pdrft
+lock dependent by _employee
+authorization master ( global )
+{
+
+  field ( readonly )
+  Empid,
+  AddrType;
+
+  delete;
+  update;
+
+  mapping for zemp_address_tp3
+    {
+      AddrType          = addr_type;
+      City1             = city1;
+      Country           = country;
+      CreateBy          = create_by;
+      CreatedAt         = created_at;
+      Empid             = empid;
+      LastChagedAt      = last_chaged_at;
+      LastChangedBy     = last_changed_by;
+      LocalLastChangeAt = local_last_change_at;
+      Name1             = name1;
+      PostalCode        = postal_code;
+      State             = state;
+      Street            = street;
+    }
+
+  association _employee { with draft; }
+
+  //determination InitAddressDrafts on modify { create; }
+
+}

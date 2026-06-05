@@ -1,0 +1,66 @@
+@Metadata.layer: #CORE
+annotate entity ZC_EMP_PERM_ADDRESS_DATA
+    with 
+{
+
+@UI.facet: [
+
+{
+
+id: 'AddressData',
+purpose: #STANDARD,
+type: #FIELDGROUP_REFERENCE,
+label: 'AddressInfo',
+targetQualifier: 'AddressInfo'
+ }
+ 
+ ]
+  @UI.hidden: true
+  Empid;
+
+  @EndUserText.label: 'Address Type'
+  @UI.lineItem: [{ position: 10, label: 'Address Type' }]
+  AddrType;
+  
+  @UI.fieldGroup: [{ qualifier: 'CurrentAddress', position: 10, label: 'Street' },
+                   { qualifier: 'PermanentAddressDisplay', position: 10, label: 'Street' }  ]
+  @UI.lineItem: [{ position: 20, label: 'Street' }]
+  Street;
+
+  @UI.fieldGroup: [{ qualifier: 'CurrentAddress', position: 20, label: 'City' },
+                   { qualifier: 'PermanentAddressDisplay', position: 20, label: 'City' } ]
+  @UI.lineItem: [{ position: 30, label: 'City' }]
+  City1;
+
+  @UI.fieldGroup: [{ qualifier: 'CurrentAddress', position: 30, label: 'State' },
+                   { qualifier: 'PermanentAddressDisplay', position: 30, label: 'State' }]
+  @UI.lineItem: [{ position: 40, label: 'State' }]
+  State;
+
+  @UI.fieldGroup: [{ qualifier: 'CurrentAddress', position: 40, label: 'Country' },
+                   { qualifier: 'PermanentAddressDisplay', position: 40, label: 'Country' } ]
+  @UI.lineItem: [{ position: 50, label: 'Country' }]
+  Country;
+  
+  @UI.fieldGroup: [{ qualifier: 'CurrentAddress', position: 50, label: 'Postal Code' },
+                   { qualifier: 'PermanentAddressDisplay', position: 50, label: 'Postal Code' } ]  
+  @UI.lineItem: [{ position: 60, label: 'Postal Code' }]
+  PostalCode;
+  
+  // Administrative fields are usually hidden in the main table view
+  @UI.hidden: true
+  CreateBy;
+  
+  @UI.hidden: true
+  CreatedAt;
+  
+  @UI.hidden: true
+  LastChangedBy;
+  
+  @UI.hidden: true
+  LastChagedAt;
+  
+  @UI.hidden: true
+  LocalLastChangeAt;
+    
+}

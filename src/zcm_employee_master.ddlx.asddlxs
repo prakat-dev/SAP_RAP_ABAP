@@ -1,0 +1,430 @@
+@Metadata.layer: #CORE
+@UI.headerInfo : { typeName: 'Employee',
+                   typeNamePlural: 'Employees',
+            title: {
+                    type: #STANDARD,
+                    label: 'Employee Creation',
+                    value: 'FullName'
+                     },
+                   imageUrl: 'ImageData',
+                   description.value: 'IdNo'
+                  }
+annotate entity ZC_EMPLOYEE_MASTER with
+{
+
+
+  -- Facet are tabs which are used to group fields together and display in ordeley manner for
+  -- each item in the table
+  @UI.facet: [
+
+
+  -- Header Level Details
+
+    {
+    id: 'HeaderInfo',
+    purpose: #HEADER,
+    type: #FIELDGROUP_REFERENCE,
+    targetQualifier: 'HeaderInfo',
+    position: 10
+    },
+
+
+  -- Collection is used to group multiple child group into one tab and display
+
+  -- General Info
+  {
+    id: 'GeneralInfo',      -- Reference ID - This will be used to link to the child groups
+    type: #COLLECTION,      -- Type should be given as collection
+    label: 'General Info',  -- Label will the name for the tab on the screen
+    position: 10            -- Position on the Above Tab
+  },
+
+  --- Sub collection for subheading for Personal Details
+  {
+     id: 'PersonalDetails',
+     type: #COLLECTION ,
+     label: 'Personal Details',
+     parentId: 'GeneralInfo',
+     position: 10
+  },
+
+  --Actual Personal Details
+  {
+    id: 'PersonalData',            -- Reference ID for Child Group - Basic Info
+    purpose: #STANDARD,            -- Set the purpose has standard to display in item area instead of header area
+    type: #FIELDGROUP_REFERENCE,   -- This unique reference is used to notify that this ID is used to group fields
+    parentId: 'PersonalDetails',       -- Link to the parent Collection group
+  //    label: 'Personal Details',     -- Label for the child group ( If only one child group is present inside the colleciton this label is not displayed )
+    targetQualifier: 'PersonalInfo',  -- This Qualifier will be used to decide which fields should be displayed inside this child group
+    position: 10                   -- Position inside the collection or the linked parent group
+  },
+
+  -- Sub collection for subheading for Contact Details
+  {
+  id: 'ContactDetails',
+  type: #COLLECTION,
+  label: 'Contact Details',
+  parentId: 'GeneralInfo',
+  position: 20
+  },
+
+  -- Actual Contact Details
+  {
+  id: 'ContactData',
+  type: #FIELDGROUP_REFERENCE,
+  parentId: 'ContactDetails',
+  targetQualifier: 'ContactInfo',
+  position: 10
+
+  },
+
+  --Address Info Collection
+  { id:'AddressInfo',
+  label: 'Address Info',
+  type: #COLLECTION,
+  position: 20
+  },
+
+
+  -- sub colleciton for Current Address
+  { id:'CurrentAddressInfo',
+  label: 'Current Address',
+  parentId: 'AddressInfo',
+  type: #COLLECTION,
+  position: 10
+  },
+
+  -- Current Address Button ( )
+  {
+    id: 'CurrentAddresButton',
+    purpose: #STANDARD,
+    type: #FIELDGROUP_REFERENCE,
+    parentId: 'CurrentAddressInfo',
+    targetQualifier: 'AddressButtonCurrent',
+    position: 10
+  },
+
+  --Current Address Display
+  {
+  id:'CurrentAddressDisplay',
+  purpose : #STANDARD,
+  type: #FIELDGROUP_REFERENCE,
+  parentId: 'CurrentAddressInfo',
+  targetElement: '_caddress',
+  targetQualifier: 'CurrentAddressDisplay',
+  position: 10
+  },
+
+  --Sub collection for Permanent Address
+  { id:'AddressInfoPermanent',
+   label: 'Permanent Address',
+   parentId: 'AddressInfo',
+   type: #COLLECTION,
+   position: 20
+  },
+
+  -- Permanent Address Button ( )
+  {
+    id: 'PermAddressButton',
+    purpose: #STANDARD,
+    type: #FIELDGROUP_REFERENCE,
+    label: 'Permanent Address Button',
+    parentId: 'AddressInfoPermanent',
+    targetQualifier: 'AddressButtonPerm',
+    position: 10
+  },
+
+  --Permanent Address Display
+  { id: 'PermanentAddressDisplay',
+  purpose: #STANDARD,
+  type: #FIELDGROUP_REFERENCE,
+  //  label: 'Permanent Address',
+  parentId: 'AddressInfoPermanent',
+  targetElement: '_paddress',
+  targetQualifier: 'PermanentAddressDisplay',
+  //  hidden: #(IsEditMode),
+  position: 30
+  },
+
+
+  -- Emergency Info
+    {
+    id: 'EmergencyInfo',
+    type: #FIELDGROUP_REFERENCE,
+    purpose: #STANDARD,
+    label: 'Emeregency Contact Info',
+    targetQualifier: 'EmergencyInfo',
+    position: 40
+  },
+
+
+  {
+
+  id: 'Status',
+  type: #FIELDGROUP_REFERENCE,
+  purpose: #STANDARD,
+  label: 'Employement Status',
+  targetQualifier: 'EmploymentStatus',
+  position: 41
+  },
+
+  -- Department Details
+
+  {
+  id: 'OrgInfo',
+  type: #FIELDGROUP_REFERENCE,
+  purpose: #STANDARD,
+  label: 'Organization Details',
+  targetQualifier: 'OrgInfo',
+  position: 45
+  },
+
+  -- Termination Details
+
+  {
+  id: 'TerminationInfo',
+  type: #FIELDGROUP_REFERENCE,
+  purpose: #STANDARD,
+  label: 'Termination Details',
+  targetQualifier: 'TerminationInfo',
+  position : 46
+  },
+
+  -- Photo is already added as Image URL in header section THis is just to enable the upload option,
+  -- This will be available only during edit
+  {
+    id: 'EmployeePhoto',
+    purpose: #STANDARD,
+    type: #FIELDGROUP_REFERENCE,
+    label: 'Upload Photo',
+    targetQualifier: 'PhotoUpload',
+    position: 50,
+    hidden : #(IsActiveEntity)
+  }
+
+  ]
+
+
+  @UI.fieldGroup: [
+  --                    Current Address Button
+                       { type: #FOR_ACTION,
+                         dataAction: 'InitCurrentAddress',
+                         label: 'Add Current Address',
+                         qualifier: 'AddressButtonCurrent',
+                         hidden: #(HideCurrButton),
+                         position: 10 },
+
+  --                   Permanent Address Button
+                       { type: #FOR_ACTION,
+                         dataAction: 'InitPermanentAddress',
+                         label: 'Add Permanent Address',
+                         qualifier: 'AddressButtonPerm',
+                         hidden: #(HidePermButton),
+                         position: 20 },
+
+  --                     Position of First Name in Personal Info Filed Group.
+                        { qualifier: 'PersonalInfo', position: 10 }
+
+                  ]
+
+  -- Main label
+  @EndUserText.label: 'First Name'
+
+  -- Personal Details
+  -- Main Page
+  @UI.selectionField: [{ position: 10 }]
+  @UI.lineItem: [{ position: 10 }]
+
+  FirstName;
+
+  @UI.lineItem:[ { hidden: true } ]
+  @UI.fieldGroup: [{ qualifier: 'PersonalInfo', position: 15 }]
+  @EndUserText.label: 'Middle Name'
+  MiddleName;
+
+  @EndUserText.label: 'Last Name'
+  @UI.selectionField: [{ position: 20 }]
+  @UI.lineItem: [{ position: 20 }]
+  @UI.fieldGroup: [{ qualifier: 'PersonalInfo', position: 20 }]
+  LastName;
+
+  @EndUserText.label: 'Date of Birth'
+  @UI.fieldGroup: [{ qualifier: 'PersonalInfo', position : 30 }]
+  DateOfBirth;
+
+  @EndUserText.label: 'Gender'
+  @UI.lineItem: [{ hidden: true }]
+  @UI.fieldGroup: [{ qualifier: 'PersonalInfo' , position : 40 , label: 'Gender' }]
+  @UI.textArrangement: #TEXT_ONLY
+  Gender;
+
+  @EndUserText.label: 'Marital Status'
+  @UI.lineItem: [ { hidden: true } ]
+  @UI.fieldGroup: [ { qualifier: 'PersonalInfo', position: 50 } ]
+  @UI.textArrangement: #TEXT_ONLY
+  MaritalStatus;
+
+  @EndUserText.label: 'Nationality'
+  @UI.lineItem:[ {  hidden:true } ]
+  @UI.fieldGroup: [ {  qualifier: 'PersonalInfo', position: 60 } ]
+  @UI.textArrangement: #TEXT_ONLY
+  Nationality;
+
+  //@EndUserText.label: 'Age'
+  //age;
+
+  @UI.fieldGroup: [{ qualifier: 'HeaderInfo', position: 30 }]
+  @EndUserText.label: 'Active'
+  @UI.lineItem: [{ position: 40 }]
+
+  @UI.identification: [
+
+    {
+
+    type: #FOR_ACTION,
+    dataAction: 'OnboardEmployee',
+    label: 'Onboard',
+    position: 10,
+    criticality: 'GreenStatus',
+    importance: #HIGH
+    },
+
+    {
+    type: #FOR_ACTION,
+    dataAction: 'OffboardEmployee',
+    label: 'Offboard',
+    position:15,
+    criticality: 'YellowStatus',
+    criticalityRepresentation: #WITH_ICON
+    },
+
+  {
+      type: #FOR_ACTION,
+      dataAction: 'TerminateEmployee',
+      label: 'Terminate',
+      position: 20,
+      importance: #HIGH,
+      criticality: 'RedStatus'
+  }
+
+  ]
+
+  Active;
+
+  @UI.lineItem: [{ hidden: true }]
+  FullName;
+
+  @UI.hidden: true
+  FileName;
+
+  @UI.hidden: true
+  @UI.fieldGroup: [{ qualifier: 'PhotoUpload' , position: 20 }]
+  MimeType;
+
+  @Consumption.filter.hidden: true
+  @UI.lineItem: [{ hidden: true }]
+  @UI.fieldGroup: [{ qualifier: 'PhotoUpload', position: 10 }]
+  ImageData;
+  //@UI.lineItem: [{ hidden: true }]
+
+  //@UI.hidden: true
+  //  @UI.fieldGroup:
+  //  [{
+  //    qualifier: 'CurrentAddress',
+  //    position: 50,
+  //    type: #FOR_ACTION,
+  //    dataAction: 'InitCurrentAddress',
+  //    label: 'Add Current Address'  }]
+
+  // Empid;
+
+  @UI.lineItem: [{ hidden: true }]
+  @UI.fieldGroup: [{ qualifier: 'ContactInfo', label : 'Mobile No', position: 10 }]
+  @EndUserText.quickInfo: 'Include country code without spaces or dashes'
+  @EndUserText.label: 'Phone Number'
+  PhoneNumberPer;
+
+  @UI.lineItem:[{ hidden: true }]
+  @EndUserText.label: 'Home No'
+  @EndUserText.quickInfo: 'Phone Number Quick Tip'
+  @UI.fieldGroup: [ { qualifier: 'ContactInfo', label:'Home No', position: 20, requiresContext: true  } ]
+  PhoneNumberHom;
+
+  @UI.lineItem: [ {  hidden: true  }]
+  @UI.fieldGroup: [{  qualifier: 'ContactInfo', label: 'Email', position: 30 }]
+  EmailId;
+
+  @UI.fieldGroup: [{ qualifier: 'EmergencyInfo', label: 'Emergeny Contact Name', position: 10 }]
+  EmergencyContactName;
+
+  @UI.fieldGroup: [{ qualifier: 'EmergencyInfo', label: 'Emergency Contact Phone', position: 20 }]
+  EmergencyContactPhone;
+
+  @UI.fieldGroup: [{ qualifier: 'EmergencyInfo', label: 'Emergency Contact Relation', position: 30 }]
+  EmergencyContactRelation;
+
+  @EndUserText.label: 'ID'
+  @UI.selectionField: [{ position: 5 }]
+  @UI.lineItem: [{ position: 5, label: 'ID Number' }]
+  @UI.fieldGroup: [{ qualifier: 'OrgInfo', position: 10 }]
+  IdNo;
+
+  @EndUserText.label: 'Employment Status'
+  @UI.selectionField: [{ position: 10 }]
+  @UI.fieldGroup: [{ qualifier: 'EmploymentStatus', position: 10, emphasized: true, importance: #HIGH }]
+  @UI.textArrangement: #TEXT_LAST
+  EmploymentStatus;
+
+
+  @EndUserText.label: 'Desgination'
+  @UI.fieldGroup: [{ qualifier: 'OrgInfo', position: 30 },
+                   { qualifier: 'HeaderInfo', position: 10 } ]
+  Designation;
+
+  @EndUserText.label: 'Department'
+  @UI.fieldGroup: [{ qualifier: 'OrgInfo', position: 40 },
+                   { qualifier: 'HeaderInfo', position: 20 } ]
+  @UI.lineItem: [{ position: 30 }]
+  Department;
+
+  @EndUserText.label: 'Organization'
+  @UI.fieldGroup: [{ qualifier: 'OrgInfo',position: 50  }]
+  Organization;
+
+  @EndUserText.label: 'Branch'
+  @UI.fieldGroup:[ { qualifier: 'OrgInfo', position: 60 } ]
+  Branch;
+
+  @EndUserText.label: 'Location'
+  @UI.fieldGroup: [{ qualifier: 'OrgInfo', position: 70  }]
+  OfficeLocaiton;
+
+  @EndUserText.label: 'Joining Date'
+  @UI.fieldGroup: [{ qualifier: 'OrgInfo', position: 80  }]
+  JoiningDate;
+
+  @EndUserText.label: 'Termination Indicator'
+  @UI.fieldGroup: [{ qualifier: 'TerminationInfo', position: 10  }]
+  Terminated;
+
+  @EndUserText.label: 'Termination Date'
+  @UI.fieldGroup: [{ qualifier: 'TerminationInfo', position: 20  }]
+  TermiationDate;
+
+  @EndUserText.label: 'Termination Reason'
+  @UI.fieldGroup: [{ qualifier: 'TerminationInfo', position: 30  }]
+  TerminationReason;
+
+  @UI.lineItem: [{ hidden: true }]
+  CreatedAt;
+  @UI.lineItem: [{ hidden: true }]
+  CreatedBy;
+  @UI.lineItem: [{ hidden: true }]
+  LastChangedAt;
+  @UI.lineItem: [{ hidden: true }]
+  LastChangedBy;
+  @UI.lineItem: [{ hidden: true }]
+  LocalLastChangedAt;
+
+
+}

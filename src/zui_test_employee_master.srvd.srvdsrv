@@ -1,0 +1,10 @@
+@EndUserText.label: 'Test Employee master'
+define service ZUI_TEST_EMPLOYEE_MASTER {
+  expose ZC_EMPLOYEE_MASTER;
+  expose ZC_EMP_ADDRESS_DATA;
+  expose ZC_EMP_PERM_ADDRESS_DATA;
+  expose ZI_GENDER_VALUEHELP;
+  expose ZI_MARITALSTATUS_VALUE_HELP;
+  expose ZI_NATIONALITY_VALUE_HELP;
+  expose ZI_EMPLOYMENT_STAT_VALUE_HELP;
+}

@@ -1,0 +1,34 @@
+{
+  "formatVersion": "2",
+  "header": {
+    "description": "Repoistory for TP3",
+    "originalLanguage": "en",
+    "abapLanguageVersion": "cloudDevelopment"
+  },
+  "generalInformation": {
+    "appType": "ui5",
+    "catalogId": "SAP_TC_UI5_REPO_UIAD",
+    "targetMappingTitle": "Employe Onboarind"
+  },
+  "ui5AppDetails": {
+    "appId": "employeecreationmodule"
+  },
+  "navigation": {
+    "targetMappingId": "UI5R_B29314E079882215ABF01B6A0EF281484382F8D6_TM",
+    "semanticObject": "Employee",
+    "action": "Manage",
+    "desktop": true,
+    "tablet": true,
+    "phone": true
+  },
+  "tiles": [
+    {
+      "id": "UI5R_B29314E079882215ABF01B6A0EF281484382F8D6_AL",
+      "tileType": "static",
+      "isDefault": true,
+      "standard": {
+        "title": "Employe Onboarind"
+      }
+    }
+  ]
+}
